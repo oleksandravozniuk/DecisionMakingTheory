@@ -10,7 +10,6 @@ class Graph():
         self.graph[u].append(v)
 
     def isCyclicUtil(self, v, visited, recStack):
-
         # Mark current node as visited and
         # adds to recursion stack
         visited[v] = True
