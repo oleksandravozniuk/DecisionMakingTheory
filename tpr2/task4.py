@@ -60,7 +60,7 @@ def berezovskiy(_sigmas):  # відношення березовського
     for i in range(0, len(berezovskiy_arr)):
         for j in range(0, len(berezovskiy_arr)):
             if it_p_1[i][j] == 0 and it_i_1[i][j] == 0:
-                it_n_1[i][j] == 1
+                it_n_1[i][j] = 1
 
     for i in range(0, len(berezovskiy_arr)):
         for j in range(0, len(berezovskiy_arr)):
