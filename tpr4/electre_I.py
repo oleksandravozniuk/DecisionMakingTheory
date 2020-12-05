@@ -2,34 +2,31 @@ from itertools import groupby
 
 import numpy as np
 
-from input import alternatives, weights, c, d
-
-
-def count_diff_ai_bi(alternatives_matrix, weights_array):
-    alt = np.array(alternatives_matrix)
-    weights = np.array(weights_array)
+def diff_ai_bi(alternatives, _weights):
+    alt = np.array(alternatives)
+    weights = np.array(_weights)
     diffs_ai_bi = []
     for i in range(0, len(alt[0, :])):
         diffs_ai_bi.append(weights[i] * (np.amax(alt[:, i]) - np.amin(alt[:, i])))
     return diffs_ai_bi
 
 
-def sum_ij(a1, a2, weights_array):
+def sum_ij(a1, a2, weights):
     result_sum = 0
     for i in range(0, len(a1)):
         if a1[i] >= a2[i]:
-            result_sum += weights_array[i]
+            result_sum += weights[i]
     return result_sum
 
 
-def c_matrix(alternatives_matrix, weights_array):
+def c_matr(alternatives, weights):
     result_matrix = [[0] * 15 for i in range(15)]
-    weights_sum = np.sum(weights_array)
+    weights_sum = np.sum(weights)
     for i in range(0, 15):
         for j in range(0, 15):
             if i != j:
-                result_matrix[i][j] = sum_ij(alternatives_matrix[i], alternatives_matrix[j],
-                                             weights_array) / weights_sum
+                result_matrix[i][j] = sum_ij(alternatives[i], alternatives[j],
+                                             weights) / weights_sum
     return result_matrix
 
 
@@ -46,13 +43,13 @@ def d_ij(a1, a2, weights_array, diffs_ai_bi):
         return 0
 
 
-def d_matrix(alternatives_matrix, weights_array):
+def d_matr(alternatives, weights):
     result_matrix = [[1] * 15 for i in range(15)]
-    diffs_ai_bi = count_diff_ai_bi(alternatives_matrix, weights_array)
+    diffs_ai_bi = diff_ai_bi(alternatives, weights)
     for i in range(0, 15):
         for j in range(0, 15):
             if i != j:
-                result_matrix[i][j] = d_ij(alternatives_matrix[i], alternatives_matrix[j], weights_array, diffs_ai_bi)
+                result_matrix[i][j] = d_ij(alternatives[i], alternatives[j], weights, diffs_ai_bi)
     return result_matrix
 
 
@@ -71,9 +68,9 @@ def write_to_file(filename, matrix, formated):
     f.close()
 
 
-def electre_I(alternatives_matrix, weights_array, c, d):
-    C_matrix = np.array(c_matrix(alternatives_matrix, weights_array))
-    D_matrix = np.array(d_matrix(alternatives_matrix, weights_array))
+def electre_I(alternatives, weights, c, d):
+    C_matrix = np.array(c_matr(alternatives, weights))
+    D_matrix = np.array(d_matr(alternatives, weights))
     relation_matrix = [[0] * 15 for i in range(15)]
     write_to_file("c.txt", C_matrix, True)
     write_to_file("d.txt", D_matrix, True)
@@ -111,4 +108,4 @@ def electre_I(alternatives_matrix, weights_array, c, d):
     return X_result
 
 
-print("X*: {}".format(electre_I(alternatives, weights, c, d)))
+
