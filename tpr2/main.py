@@ -1,35 +1,52 @@
-from calculations import get_sigmas
-from file_manager import get_input, write_number, write_matrix
-from optimization import print_opt
-from task1 import pareto
-from task2 import majoritar
-from task3 import lexicographic
-from task4 import berezovskiy
-from task5 import podinovskiy
+import numpy as np
+from graphviz import Digraph
 
-input_matrix = get_input()
+from KOptimization import k1, k2, k3, k4
+from NeimanMorgenstern import nm, check_inner_persistence, check_outer_persistence
+from graph import Graph
 
-print(pareto(get_sigmas(input_matrix)))
-print_opt(pareto(get_sigmas(input_matrix)))
-write_number(1)
-write_matrix(pareto(get_sigmas(input_matrix)))
+from input import get_matrices
 
-print(majoritar(get_sigmas(input_matrix)))
-print_opt(majoritar(get_sigmas(input_matrix)))
-write_number(2)
-write_matrix(majoritar(get_sigmas(input_matrix)))
 
-print(lexicographic(get_sigmas(input_matrix)))
-print_opt(lexicographic(get_sigmas(input_matrix)))
-write_number(3)
-write_matrix(lexicographic(get_sigmas(input_matrix)))
+def get_graphs():
+    # views = []
+    graphs = []
+    matrices = get_matrices()
+    for k in range(10):
+        view = Digraph('G', filename='hello' + str(k) + '.gv')
+        g = Graph(15)
+        matrix = matrices[k]
+        for j in range(15):
+            for i in range(15):
+                if matrix[j][i] == 1:
+                    g.addEdge(j, i)
+                    view.edge(str(j), str(i))
+        graphs.append(g)
+    #     views.append(view)
+    # views[1].view()
+    return graphs
 
-print(berezovskiy(get_sigmas(input_matrix)))
-print_opt(berezovskiy(get_sigmas(input_matrix)))
-write_number(4)
-write_matrix(berezovskiy(get_sigmas(input_matrix)))
 
-print(podinovskiy(input_matrix))
-print_opt(podinovskiy(input_matrix))
-write_number(5)
-write_matrix(podinovskiy(input_matrix))
+def check_cycle(graph):
+    if graph.isCyclic() == 1:
+        return 1
+    else:
+        return 0
+
+
+graphs = get_graphs()
+matrices = get_matrices()
+for i in range(10):
+    print("Graph: " + str(i))
+    if check_cycle(graphs[i]) == 1:
+        print("Cyclic")
+        k1(matrices[i])
+        k2(matrices[i])
+        k3(matrices[i])
+        k4(matrices[i])
+    else:
+        print("Acyclic")
+        res = nm(matrices[i].T)
+        print(str(res))
+        print("Inner persistence: " + str(check_inner_persistence(matrices[i], res)))
+        print("Outer persistence: " + str(check_outer_persistence(matrices[i], res)))
