@@ -18,14 +18,14 @@ def weighted_estimates(r_matrix, weights):
 # виведення результатів
 def output_result(result, opt, method):
     print(method)
-    print("Ранжування:")
+    print("Range:")
     for i in result:
         print(i, end=" ")
     print()
     if len(opt)==1:
-        print("Найкраща альтернатива:")
+        print("The best alternative:")
     else:
-        print("Множина кращих альтернатив:")
+        print("Best alternatives:")
     for i in opt:
         print(i, end=" ")
     print()

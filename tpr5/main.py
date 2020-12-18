@@ -3,4 +3,5 @@ from topsis import print_topsis
 from vikor import print_vikor
 
 print_topsis(alternatives, weights)
+print(".....................................................")
 print_vikor(alternatives, weights)
